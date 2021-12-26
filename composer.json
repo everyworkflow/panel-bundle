@@ -1,0 +1,26 @@
+{
+    "name": "everyworkflow/panel-bundle",
+    "description": "Panel bundle for every workflow project.",
+    "type": "package",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "EveryWorkflow",
+            "email": "everyworkflow@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "EveryWorkflow\\PanelBundle\\": "./"
+        },
+        "exclude-from-classmap": [
+            "Resources",
+            "Tests"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "EveryWorkflow\\PanelBundle\\Tests\\": "Tests/"
+        }
+    }
+}
