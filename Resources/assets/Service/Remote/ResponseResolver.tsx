@@ -2,8 +2,6 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
-import LocalStorage from "@EveryWorkflow/PanelBundle/Service/LocalStorage";
-
 const ResponseResolver = async (res: any, url: string): Promise<any> => {
     const statusCode = res.status;
     if (statusCode === 200) {
@@ -25,7 +23,6 @@ const ResponseResolver = async (res: any, url: string): Promise<any> => {
         throw new Error(res.detail);
     } else if (statusCode === 401) {
         res = await res.json();
-        LocalStorage.set('ew_auth', undefined);
         throw new Error(res.detail);
     } else {
         throw new Error('Something went wrong!');
