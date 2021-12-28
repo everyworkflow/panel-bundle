@@ -9,6 +9,9 @@
             "email": "everyworkflow@gmail.com"
         }
     ],
+    "require": {
+        "symfony/webpack-encore-bundle": "^1.13"
+    },
     "autoload": {
         "psr-4": {
             "EveryWorkflow\\PanelBundle\\": "./"
