@@ -4,6 +4,7 @@
 
 import notification from "antd/lib/notification";
 import AlertDataInterface from "@EveryWorkflow/PanelBundle/Model/AlertDataInterface";
+import IndexedDb from '@EveryWorkflow/PanelBundle/Service/IndexedDb/index';
 
 export const ALERT_TYPE_DEFAULT = 'alert_type_default'; // default
 export const ALERT_TYPE_SUCCESS = 'alert_type_success';
@@ -14,12 +15,18 @@ export const ALERT_TYPE_WARNING = 'alert_type_warning';
 const ALERT_PLACEMENT = 'topRight';
 
 const AlertAction = (alertData: AlertDataInterface) => {
+
+    (async () => {
+        const panelDb = await IndexedDb.getDb('panel', 'alert_history');
+        panelDb.add('alert_history', { ...alertData, date: new Date() }).catch(error => {});
+    })();
+
     switch (alertData.type) {
         case ALERT_TYPE_SUCCESS: {
             notification.success({
                 placement: ALERT_PLACEMENT,
-                message: alertData.title,
-                description: alertData.message,
+                message: alertData.message,
+                description: alertData.description,
                 onClick: () => {
                     console.log('Notification Clicked!');
                 },
@@ -29,8 +36,8 @@ const AlertAction = (alertData: AlertDataInterface) => {
         case ALERT_TYPE_ERROR: {
             notification.error({
                 placement: ALERT_PLACEMENT,
-                message: alertData.title,
-                description: alertData.message,
+                message: alertData.message,
+                description: alertData.description,
                 onClick: () => {
                     console.log('Notification Clicked!');
                 },
@@ -40,8 +47,8 @@ const AlertAction = (alertData: AlertDataInterface) => {
         case ALERT_TYPE_INFO: {
             notification.info({
                 placement: ALERT_PLACEMENT,
-                message: alertData.title,
-                description: alertData.message,
+                message: alertData.message,
+                description: alertData.description,
                 onClick: () => {
                     console.log('Notification Clicked!');
                 },
@@ -51,8 +58,8 @@ const AlertAction = (alertData: AlertDataInterface) => {
         case ALERT_TYPE_WARNING: {
             notification.warning({
                 placement: ALERT_PLACEMENT,
-                message: alertData.title,
-                description: alertData.message,
+                message: alertData.message,
+                description: alertData.description,
                 onClick: () => {
                     console.log('Notification Clicked!');
                 },
@@ -62,8 +69,8 @@ const AlertAction = (alertData: AlertDataInterface) => {
         default: {
             notification.open({
                 placement: ALERT_PLACEMENT,
-                message: alertData.title,
-                description: alertData.message,
+                message: alertData.message,
+                description: alertData.description,
                 onClick: () => {
                     console.log('Notification Clicked!');
                 },

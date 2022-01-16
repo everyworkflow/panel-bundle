@@ -1,16 +1,22 @@
-import {IDBPDatabase, openDB} from 'idb';
+/*
+ * @copyright EveryWorkflow. All rights reserved.
+ */
+
+import { IDBPDatabase, openDB } from 'idb';
 
 class IndexedDbObject {
     private database: string;
+    private version: number;
     private db: any;
 
-    constructor(database: string) {
+    constructor(database: string, version: number = 1) {
         this.database = database;
+        this.version = version;
     }
 
     public async createObjectStore(tableNames: Array<string>) {
         try {
-            this.db = await openDB(this.database, 1, {
+            this.db = await openDB(this.database, this.version, {
                 upgrade(db: IDBPDatabase) {
                     for (const tableName of tableNames) {
                         if (db.objectStoreNames.contains(tableName)) {
@@ -24,8 +30,9 @@ class IndexedDbObject {
                 },
             });
         } catch (error) {
-            return false;
+            console.log('createObjectStore - error -->', error);
         }
+        return this;
     }
 
     public async getValue(tableName: string, id: number) {

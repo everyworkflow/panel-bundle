@@ -19,9 +19,7 @@ const HtmlRawComponent = ({
         <div
             className={className}
             style={style}
-            dangerouslySetInnerHTML={{ __html: content }}
-        >
-        </div>
+            dangerouslySetInnerHTML={{ __html: content }} />
     );
 };
 

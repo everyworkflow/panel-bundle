@@ -4,7 +4,7 @@
 
 interface AlertDataInterface {
     message: string;
-    title?: string;
+    description?: string;
     type?: string;
     date?: Date;
 }

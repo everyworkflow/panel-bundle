@@ -2,33 +2,33 @@
  * @copyright EveryWorkflow. All rights reserved.
  */
 
+import HttpError from "@EveryWorkflow/PanelBundle/Error/HttpError";
+import ValidationError from '@EveryWorkflow/PanelBundle/Error/ValidationError';
+
 const ResponseResolver = async (res: any, url: string): Promise<any> => {
     const statusCode = res.status;
-    if (statusCode === 200) {
-        try {
-            res = await res.json();
+    let response: any = {};
 
-            if (Number(process.env.REACT_DEBUG) && Number(process.env.REACT_REMOTE_DEBUG) > 2) {
-                console.log('remote response data -> ' + url, res);
-            }
-
-            return res;
-        } catch (error: any) {
-            throw new Error('Remote could not resolve!');
+    try {
+        response = await res.json();
+        if (Number(process.env.REACT_DEBUG) && Number(process.env.REACT_REMOTE_DEBUG) > 2) {
+            console.log('remote response data -> ' + url + ' - ' + statusCode, response);
         }
-    } else if (statusCode === 404 || statusCode === 405) {
-        throw new Error('Remote could not resolve!');
-    } else if (statusCode === 400 || statusCode === 403 || statusCode === 500) {
-        res = await res.json();
-        throw new Error(res.detail);
-    } else if (statusCode === 401) {
-        res = await res.json();
-        throw new Error(res.detail);
-    } else {
-        throw new Error('Something went wrong!');
+    } catch (error: any) {
+        throw new HttpError('Remote could not resolve!');
     }
 
-    return null;
+    switch (statusCode) {
+        case 200: {
+            return response;
+        }
+        case 400: {
+            throw new ValidationError(response?.detail, statusCode, response?.errors);
+        }
+        default: {
+            throw new HttpError(response?.detail, statusCode);
+        }
+    }
 };
 
 export default ResponseResolver;

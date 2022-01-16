@@ -6,7 +6,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface ScrollToTopOnRouteChangeProps {
-    children: JSX.Element;
+    children: JSX.Element | JSX.Element[];
 }
 
 const ScrollToTopOnRouteChange = ({ children }: ScrollToTopOnRouteChangeProps) => {

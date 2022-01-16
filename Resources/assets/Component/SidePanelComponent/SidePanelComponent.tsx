@@ -4,7 +4,8 @@
 
 import React, { useState } from 'react';
 import Drawer from 'antd/lib/drawer';
-import {useResponsive} from "ahooks";
+import { useResponsive } from "ahooks";
+import { Scrollbars } from 'react-custom-scrollbars';
 
 export const PANEL_SIZE_FULL = 'panel_full_size'; // default
 export const PANEL_SIZE_HALF = 'panel_half_size'; // default
@@ -18,28 +19,38 @@ export const PANEL_FROM_BOTTOM = 'bottom';
 
 interface SidePanelComponentProps {
     children?: JSX.Element | JSX.Element[];
-    title?: string;
+    title?: React.ReactNode;
+    extra?: React.ReactNode;
     size?: string;
     fromDirection?: any;
     panelZIndex?: number;
-    style?: any;
-    bodyStyle?: any;
+    closeIcon?: React.ReactNode;
+    style?: React.CSSProperties;
+    drawerStyle?: React.CSSProperties;
+    headerStyle?: React.CSSProperties
+    bodyStyle?: React.CSSProperties;
     onClose?: () => void;
     footer?: React.ReactNode;
     footerStyle?: React.CSSProperties;
+    scrollBarStyle?: React.CSSProperties;
 }
 
 const SidePanelComponent = ({
     children,
     title,
+    extra,
     size,
     fromDirection,
     panelZIndex,
+    closeIcon,
     style,
+    drawerStyle,
+    headerStyle,
     bodyStyle,
     onClose,
     footer,
     footerStyle,
+    scrollBarStyle
 }: SidePanelComponentProps) => {
     const responsive = useResponsive();
     const [visible, setVisible] = useState(true);
@@ -63,7 +74,7 @@ const SidePanelComponent = ({
                 return '450px';
             }
             case PANEL_SIZE_SMALL: {
-                return '250px';
+                return '264px';
             }
             default: {
                 return 'calc(100% - 200px)';
@@ -74,18 +85,30 @@ const SidePanelComponent = ({
     return (
         <>
             <Drawer
+                closeIcon={closeIcon}
                 style={style}
-                bodyStyle={bodyStyle}
+                drawerStyle={drawerStyle}
+                headerStyle={{ padding: 16, paddingRight: 24, ...headerStyle }}
+                bodyStyle={{ padding: 0 }}
                 title={title}
+                extra={extra}
                 placement={fromDirection ?? PANEL_FROM_RIGHT}
                 onClose={onComponentClose}
                 visible={visible}
                 width={getPanelSize()}
                 zIndex={panelZIndex ?? 1001}
                 footer={footer}
-                footerStyle={footerStyle}
-            >
-                {children}
+                footerStyle={footerStyle}>
+                <Scrollbars
+                    autoHide={true}
+                    style={{
+                        height: footer ? 'calc(100vh - 108px)' : 'calc(100vh - 57px)',
+                        ...scrollBarStyle
+                    }}>
+                    <div style={{ padding: 24, ...bodyStyle }}>
+                        {children}
+                    </div>
+                </Scrollbars>
             </Drawer>
         </>
     );
