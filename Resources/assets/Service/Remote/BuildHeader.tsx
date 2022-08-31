@@ -4,17 +4,20 @@
 
 import LocalStorage from "@EveryWorkflow/PanelBundle/Service/LocalStorage";
 
-const BuildHeader = async (headers: any = {}): Promise<any> => {
+const BuildHeader = async (headers: any = {}, config: any = {}): Promise<any> => {
     const returnHeaders: any = {
         'accept': 'application/json',
         'Content-Type': 'application/json',
     };
-    try {
-        const authData: any = LocalStorage.get('ew_auth');
-        if (authData.token) {
-            returnHeaders['Authorization'] = 'Bearer ' + authData.token;
-        }
-    } catch (error: any) { }
+
+    if (!config?.no_auth) {
+        try {
+            const authData: any = LocalStorage.get('ew_auth');
+            if (authData.token) {
+                returnHeaders['Authorization'] = 'Bearer ' + authData.token;
+            }
+        } catch (error: any) { }
+    }
 
     return {
         headers: {

@@ -8,7 +8,7 @@ import LocalStorage from '@EveryWorkflow/PanelBundle/Service/LocalStorage';
 
 const RefreshAuthToken = async (): Promise<any> => {
     const url = UrlHelper.buildApiUrl('/login/refresh');
-    const headers = await BuildHeader();
+    const headers = await BuildHeader({}, {no_auth: true});
 
     let data: any = null;
     try {
